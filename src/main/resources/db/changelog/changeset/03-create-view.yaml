@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: your_name
+      changes:
+        - sql:
+            sql: |
+              CREATE OR REPLACE VIEW promo_analysis_view AS
+              SELECT 
+                c.chain_name,
+                p.l3_product_category_code,
+                p.l3_product_category_name,
+                DATE_TRUNC('month', a.date) AS month,
+                SUM(CASE WHEN a.price_type = 'REGULAR' THEN a.volume ELSE 0 END) AS regular_volume,
+                SUM(CASE WHEN a.price_type = 'PROMO' THEN a.volume ELSE 0 END) AS promo_volume,
+                SUM(CASE WHEN a.price_type = 'REGULAR' THEN a.actual_sales_value ELSE 0 END) AS regular_sales_value,
+                SUM(CASE WHEN a.price_type = 'PROMO' THEN a.actual_sales_value ELSE 0 END) AS promo_sales_value,
+                CASE 
+                  WHEN SUM(a.volume) > 0 THEN 
+                    ROUND(SUM(CASE WHEN a.price_type = 'PROMO' THEN a.volume ELSE 0 END) * 100.0 / SUM(a.volume), 2)
+                  ELSE 0 
+                END AS promo_percentage
+              FROM actuals a
+              JOIN customers c ON a.ship_to_code = c.ch3_ship_to_code
+              JOIN products p ON a.material_no = p.material_no
+              GROUP BY c.chain_name, p.l3_product_category_code, p.l3_product_category_name, DATE_TRUNC('month', a.date)ain_name, p.l3_product_category_code, p.l3_product_category_name, DATE_TRUNC('month', a.date)

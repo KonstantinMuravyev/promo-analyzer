@@ -1,0 +1,105 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: KonstantinMuravyev
+      changes:
+        - createTable:
+            tableName: customers
+            columns:
+              - column:
+                  name: ch3_ship_to_code
+                  type: VARCHAR(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: chain_name
+                  type: VARCHAR(255)
+              - column:
+                  name: ch3_ship_to_name
+                  type: VARCHAR(255)
+
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: material_no
+                  type: VARCHAR(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: material_desc_rus
+                  type: TEXT
+              - column:
+                  name: l3_product_category_code
+                  type: VARCHAR(255)
+              - column:
+                  name: l3_product_category_name
+                  type: VARCHAR(255)
+
+        - createTable:
+            tableName: price
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: chain_name
+                  type: VARCHAR(255)
+              - column:
+                  name: material_no
+                  type: VARCHAR(255)
+              - column:
+                  name: regular_price_per_unit
+                  type: DECIMAL(19, 4)
+
+        - createTable:
+            tableName: actuals
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: ship_to_code
+                  type: VARCHAR(255)
+              - column:
+                  name: material_no
+                  type: VARCHAR(255)
+              - column:
+                  name: date
+                  type: DATE
+              - column:
+                  name: volume
+                  type: DECIMAL(19, 4)
+              - column:
+                  name: actual_sales_value
+                  type: DECIMAL(19, 4)
+              - column:
+                  name: price_per_unit
+                  type: DECIMAL(19, 4)
+              - column:
+                  name: price_type
+                  type: VARCHAR(10)
+
+        - addForeignKeyConstraint:
+            baseTableName: actuals
+            baseColumnNames: ship_to_code
+            referencedTableName: customers
+            referencedColumnNames: ch3_ship_to_code
+            constraintName: fk_actuals_customers
+
+        - addForeignKeyConstraint:
+            baseTableName: actuals
+            baseColumnNames: material_no
+            referencedTableName: products
+            referencedColumnNames: material_no
+            constraintName: fk_actuals_products

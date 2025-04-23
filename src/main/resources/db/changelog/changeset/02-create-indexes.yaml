@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: KonstantinMuravyev
+      changes:
+        - createIndex:
+            tableName: actuals
+            indexName: idx_actuals_date
+            columns:
+              - column:
+                  name: date
+                  type: DATE
+
+        - createIndex:
+            tableName: actuals
+            indexName: idx_actuals_price_type
+            columns:
+              - column:
+                  name: price_type
+                  type: VARCHAR(10)
+
+        - createIndex:
+            tableName: price
+            indexName: idx_price_chain_material
+            columns:
+              - column:
+                  name: chain_name
+                  type: VARCHAR(255)
+              - column:
+                  name: material_no
+                  type: VARCHAR(255)
